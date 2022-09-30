@@ -1,4 +1,4 @@
-﻿namespace SimplePDF.NET.Internals
+﻿namespace SimplePDF.NET.Internals.Objects
 {
     /// <summary>
     /// Boolean objects represent the logical values of true and false and are represented ac‐ cordingly in the PDF, either as true or false.

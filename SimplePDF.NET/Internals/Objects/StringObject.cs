@@ -1,4 +1,4 @@
-﻿namespace SimplePDF.NET.Internals
+﻿namespace SimplePDF.NET.Internals.Objects
 {
     /// <summary>
     /// Strings as they are serialized into PDF are simply series of (zero or more) 8-bit bytes written either as literal characters enclosed in parentheses, 

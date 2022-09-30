@@ -1,4 +1,4 @@
-﻿namespace SimplePDF.NET.Internals
+﻿namespace SimplePDF.NET.Internals.Objects
 {
     /// <summary>
     /// The null object, if actually written to a file, is simply the four characters null. 

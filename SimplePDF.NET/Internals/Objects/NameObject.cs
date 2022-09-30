@@ -1,4 +1,4 @@
-﻿namespace SimplePDF.NET.Internals
+﻿namespace SimplePDF.NET.Internals.Objects
 {
     /// <summary>
     /// A name object in PDF is a unique sequence of characters (except character code 0, ASCII null) normally used in situations where there is a fixed set of values.

@@ -1,4 +1,4 @@
-﻿namespace SimplePDF.NET.Internals
+﻿namespace SimplePDF.NET.Internals.Objects
 {
     /// <summary>
     /// PDF supports two different types of numeric objects—integer and real—representing their mathematical equivalents.

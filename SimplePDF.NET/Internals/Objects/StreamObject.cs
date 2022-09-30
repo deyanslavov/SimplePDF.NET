@@ -1,4 +1,4 @@
-﻿namespace SimplePDF.NET.Internals
+﻿namespace SimplePDF.NET.Internals.Objects
 {
     /// <summary>
     /// Streams in PDF are arbitrary sequences of 8-bit bytes that may be of unlimited length and can be compressed or encoded. 

@@ -1,4 +1,4 @@
-﻿namespace SimplePDF.NET.Internals
+﻿namespace SimplePDF.NET.Internals.Objects
 {
     /// <summary>
     /// An array object is a heterogeneous collection of other objects enclosed in square brackets ([ and ]) and separated by white space. 

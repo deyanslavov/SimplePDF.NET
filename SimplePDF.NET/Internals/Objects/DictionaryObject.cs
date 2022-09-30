@@ -1,4 +1,4 @@
-﻿namespace SimplePDF.NET.Internals
+﻿namespace SimplePDF.NET.Internals.Objects
 {
     /// <summary>
     /// As it serves as the basis for almost every higher-level object, the most common object in PDF is the dictionary object. 
