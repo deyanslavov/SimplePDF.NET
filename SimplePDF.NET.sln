@@ -3,7 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePDF.NET", "SimplePDF.NET\SimplePDF.NET.csproj", "{908F4422-A78F-4CF3-BD7C-0C35A31FD5F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimplePDF.NET", "SimplePDF.NET\SimplePDF.NET.csproj", "{908F4422-A78F-4CF3-BD7C-0C35A31FD5F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F36FEA0F-EF8E-4958-A84B-4042E49EE416}"
+	ProjectSection(SolutionItems) = preProject
+		Resources\Developing with PDF Dive Into the Portable Document Format (Leonard Rosenthol) (z-lib.org).pdf = Resources\Developing with PDF Dive Into the Portable Document Format (Leonard Rosenthol) (z-lib.org).pdf
+		Resources\PDF Explained The ISO Standard for Document Exchange (John Whitington) (z-lib.org).pdf = Resources\PDF Explained The ISO Standard for Document Exchange (John Whitington) (z-lib.org).pdf
+		Resources\PDF Reference Version 1.7 (Adobe Systems Inc.) (z-lib.org).pdf = Resources\PDF Reference Version 1.7 (Adobe Systems Inc.) (z-lib.org).pdf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
