@@ -1,4 +1,6 @@
-﻿namespace SimplePDF.NET.Internals.FileStructure
+﻿using SimplePDF.NET.Utilities;
+
+namespace SimplePDF.NET.Internals.FileStructure
 {
     /// <summary>
     /// The header of a PDF starts at byte 0 of the file and consists of at least 8 bytes followed by an end-of-line marker. 
@@ -11,6 +13,18 @@
     /// </summary>
     internal class PdfFileHeader
     {
+        private bool _includeBinaryIndicator;
+        private const string _pdfVersion = "%PDF-1.7";
+        private const string _binaryIndicator = "%âãÏÓ";
 
+        internal PdfFileHeader(bool includeBinaryIndicator)
+        {
+            _includeBinaryIndicator = includeBinaryIndicator;
+        }
+
+        internal byte[] GetBytes()
+        {
+            return ByteHelper.GetBytes($"{_pdfVersion}\n{(_includeBinaryIndicator ? _binaryIndicator : string.Empty)}");
+        }
     }
 }

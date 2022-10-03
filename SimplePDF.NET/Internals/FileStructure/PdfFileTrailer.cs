@@ -1,4 +1,6 @@
-﻿namespace SimplePDF.NET.Internals.FileStructure
+﻿using SimplePDF.NET.Internals.Objects;
+
+namespace SimplePDF.NET.Internals.FileStructure
 {
     /// <summary>
     /// The trailer is primarily a dictionary with keys and values that provides document-level information that is necessary to understand in order to process the document itself.
@@ -10,6 +12,6 @@
     /// </summary>
     internal class PdfFileTrailer
     {
-
+        private DictionaryObject _root = new();
     }
 }

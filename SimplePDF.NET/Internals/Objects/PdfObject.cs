@@ -5,5 +5,22 @@
     /// </summary>
     internal abstract class PdfObject
     {
+        protected int _objectNumber;
+
+        protected int _generationNumber;
+
+        protected long _byteOffsetPosition;
+
+        /// <summary>
+        /// Gets the object's number
+        /// </summary>
+        /// <returns></returns>
+        internal int GetObjectNumber() => _objectNumber;
+
+        /// <summary>
+        /// Gets the object's generation number
+        /// </summary>
+        /// <returns></returns>
+        internal int GetGenerationNumber() => _generationNumber;
     }
 }

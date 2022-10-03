@@ -14,6 +14,6 @@
     /// </summary>
     internal class DictionaryObject : PdfObject
     {
-        //NOTE to consider: name trees and number tree
+        private IDictionary<NameObject, PdfObject> map = new SortedDictionary<NameObject, PdfObject>();
     }
 }

@@ -9,6 +9,6 @@
     /// </summary>
     internal class ArrayObject : PdfObject
     {
-
+        private IList<PdfObject> _objects;
     }
 }

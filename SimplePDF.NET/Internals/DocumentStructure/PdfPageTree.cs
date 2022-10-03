@@ -1,4 +1,6 @@
-﻿namespace SimplePDF.NET.Internals.DocumentStructure
+﻿using SimplePDF.NET.Internals.Objects;
+
+namespace SimplePDF.NET.Internals.DocumentStructure
 {
     /// <summary>
     /// The pages in a PDF are accessed through the page tree, which defines the ordering of the pages. 
@@ -12,6 +14,8 @@
     /// </summary>
     internal class PdfPageTree
     {
+        private PdfPages _root;
 
-    } 
+        private IList<IndirectObject> _pageRefs;// ??or objectRefs??
+    }
 }
