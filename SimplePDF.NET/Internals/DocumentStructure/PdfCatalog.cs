@@ -12,5 +12,6 @@
     /// </summary>
     internal class PdfCatalog
     {
+        private readonly PdfPageTree _pageTree;
     }
 }

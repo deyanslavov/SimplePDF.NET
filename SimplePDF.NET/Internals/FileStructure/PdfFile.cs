@@ -8,7 +8,7 @@
         private readonly PdfFileXrefTable _crossRefTable;
         private readonly PdfFileTrailer _trailer;
 
-        public PdfFile(PdfFileBody body, PdfFileXrefTable crossRefTable, PdfFileTrailer trailer, bool hasBinaryData)
+        internal PdfFile(PdfFileBody body, PdfFileXrefTable crossRefTable, PdfFileTrailer trailer, bool hasBinaryData)
         {
             _hasBinaryData = hasBinaryData;
             _header = new PdfFileHeader(hasBinaryData);

@@ -15,7 +15,13 @@ namespace SimplePDF.NET.Internals.DocumentStructure
     internal class PdfPageTree
     {
         private PdfPages _root;
+        
+        private IList<IndirectObject> _pageRefs;
 
-        private IList<IndirectObject> _pageRefs;// ??or objectRefs??
+        private IList<PdfPage> _pages;
+
+        private IList<PdfPages> _parents;
+
+        //methods for insert, remove, traverse, etc
     }
 }

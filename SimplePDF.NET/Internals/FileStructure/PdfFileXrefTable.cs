@@ -23,13 +23,14 @@ namespace SimplePDF.NET.Internals.FileStructure
 
         internal byte[] GetBytes()
         {
+            var defaultXrefEntry = $"xref\n0 {_entries.Count}\n0000000000 65535 f\n";
             var stringBuilder = new StringBuilder();
 
             //Append xref defaults
             //xref
             //0 objects count
             //0000000000 65535 f
-            stringBuilder.Append($"xref\n0 {_entries.Count}\n0000000000 65535 f\n");
+            stringBuilder.Append(defaultXrefEntry);
 
             foreach (var entry in _entries)
             {
@@ -69,7 +70,7 @@ namespace SimplePDF.NET.Internals.FileStructure
 
             public override string ToString()
             {
-                return $"{ByteOffset.ToString().PadLeft(10)} {GenerationNumber.ToString().PadLeft(5)} {(IsFree ? "f" : "n")} ";
+                return $"{ByteOffset,10} {GenerationNumber,5} {(IsFree ? "f \n" : "n \n")} ";
             }
         }
     }

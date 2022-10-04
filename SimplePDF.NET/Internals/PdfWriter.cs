@@ -1,5 +1,4 @@
-﻿using System;
-using SimplePDF.NET.Utilities;
+﻿using SimplePDF.NET.Utilities;
 
 namespace SimplePDF.NET.Internals
 {
@@ -11,9 +10,9 @@ namespace SimplePDF.NET.Internals
 
         internal static readonly byte[] EOL = ByteHelper.GetBytes("\n");
 
-        public PdfWriter()
-        {
-        }
+        internal static readonly byte[] FREEXREFENTRY = ByteHelper.GetBytes("f \n");
+
+        internal static readonly byte[] INUSEXREFENTRY = ByteHelper.GetBytes("n \n");
     }
 }
 
