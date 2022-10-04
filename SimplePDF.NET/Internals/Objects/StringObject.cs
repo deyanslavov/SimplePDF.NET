@@ -10,6 +10,6 @@
     /// </summary>
     internal class StringObject : PdfObject
     {
-
+        //NOTE: consider creating child classes for LiteralStringObject and HexadecimalStringObject
     }
 }
