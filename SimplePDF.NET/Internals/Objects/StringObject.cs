@@ -10,6 +10,13 @@
     /// </summary>
     internal class StringObject : PdfObject
     {
-        //NOTE: consider creating child classes for LiteralStringObject and HexadecimalStringObject
+        protected byte[] _contentBytes;
+
+        protected internal StringObject(byte[] contentBytes)
+        {
+            _contentBytes = contentBytes;
+        }
+
+        internal override byte[] GetBytes() => _contentBytes;
     }
 }

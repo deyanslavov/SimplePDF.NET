@@ -9,6 +9,18 @@
     /// </summary>
     internal class ArrayObject : PdfObject
     {
-        private IList<PdfObject> _objects;
+        private readonly IList<PdfObject> _objects;
+
+        public ArrayObject()
+        {
+            _objects = [];
+        }
+
+        internal void Add(PdfObject pdfObject) => _objects.Add(pdfObject);
+
+        internal override byte[] GetBytes()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

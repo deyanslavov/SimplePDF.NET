@@ -1,6 +1,11 @@
-﻿// See https://aka.ms/new-console-template for more information
-using SimplePDF.NET.Internals.FileStructure;
-using SimplePDF.NET.Utilities;
+﻿using SimplePDF.NET.Internals.DocumentStructure;
 
 Console.WriteLine("Hello, World!");
+var tree = new PdfPageTree();
+tree.AddPage(new PdfPage());
+tree.AddPage(new PdfPage());
+tree.AddPage(new PdfPage());
+tree.AddPage(new PdfPage());
+tree.AddPage(new PdfPage());
+tree.AddPage(new PdfPage());
 Console.ReadKey();

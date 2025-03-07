@@ -22,5 +22,19 @@
         /// </summary>
         /// <returns></returns>
         internal int GetGenerationNumber() => _generationNumber;
+
+        internal T As<T>() where T: PdfObject
+        {
+            var self = this;
+
+            return self is T tObj ? tObj :
+                throw new ArgumentException($"{this.GetType().FullName} is not assignable to {typeof(T).FullName}");
+        }
+
+        /// <summary>
+        /// Gets this <see cref="PdfObject"/>'s byte representation
+        /// </summary>
+        /// <returns></returns>
+        internal abstract byte[] GetBytes();
     }
 }

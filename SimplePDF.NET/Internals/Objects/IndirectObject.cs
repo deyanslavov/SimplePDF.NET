@@ -7,6 +7,9 @@
     /// </summary>
     internal class IndirectObject : PdfObject
     {
-
+        internal override byte[] GetBytes()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

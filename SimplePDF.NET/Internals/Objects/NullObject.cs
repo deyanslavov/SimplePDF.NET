@@ -1,4 +1,6 @@
-﻿namespace SimplePDF.NET.Internals.Objects
+﻿using SimplePDF.NET.Internals.Tokens;
+
+namespace SimplePDF.NET.Internals.Objects
 {
     /// <summary>
     /// The null object, if actually written to a file, is simply the four characters null. 
@@ -7,6 +9,9 @@
     /// </summary>
     internal class NullObject : PdfObject
     {
-
+        internal override byte[] GetBytes()
+        {
+            return Whitespaces.NULL;
+        }
     }
 }

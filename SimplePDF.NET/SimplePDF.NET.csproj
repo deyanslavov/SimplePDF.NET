@@ -13,4 +13,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Internals\CompressionFilters\" />
+    <Folder Include="Internals\PaintningOperators\" />
+  </ItemGroup>
 </Project>

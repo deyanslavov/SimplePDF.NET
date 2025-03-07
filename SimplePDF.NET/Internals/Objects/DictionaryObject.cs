@@ -10,10 +10,26 @@
     /// <para>While many existing implementations tend to write the keys sorted alphabetically, that is neither required nor expected. 
     /// In fact, no assumptions should be made about dictionary processing, either — the keys may be read and processed in any order.
     /// A dictionary that contains the same key twice is invalid, and which value is selected is undefined.</para>
-    /// 
     /// </summary>
     internal class DictionaryObject : PdfObject
     {
-        private IDictionary<NameObject, PdfObject> map = new SortedDictionary<NameObject, PdfObject>();
+        private readonly IDictionary<NameObject, PdfObject> _map = new SortedDictionary<NameObject, PdfObject>();
+
+        internal void Add(NameObject name, PdfObject value) => _map.Add(name, value);
+
+        internal ArrayObject? GetAsArray(NameObject key)
+        {
+            if (_map.ContainsKey(key))
+            {
+                return _map[key].As<ArrayObject>();
+            }
+
+            return null;
+        }
+
+        internal override byte[] GetBytes()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -13,6 +13,9 @@
     /// </summary>
     internal class StreamObject : PdfObject
     {
-
+        internal override byte[] GetBytes()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -24,6 +24,8 @@ namespace SimplePDF.NET.Internals.FileStructure
 
         internal byte[] GetBytes()
         {
+            //%PDF-1.7
+            //%âãÏÓ
             return ByteHelper.GetBytes($"{_pdfVersion}\n{(_includeBinaryIndicator ? _binaryIndicator : string.Empty)}");
         }
     }

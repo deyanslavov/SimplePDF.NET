@@ -51,7 +51,7 @@ namespace SimplePDF.NET.Internals
 
         private void WriteObject(PdfObject pdfObject)
         {
-            //get bytes and write to streeam
+            //get bytes and write to stream
             //emit ObjectWritten event to cross ref table with object byte offset position
             OnObjectWritten?.Invoke(this, _position);
         }
