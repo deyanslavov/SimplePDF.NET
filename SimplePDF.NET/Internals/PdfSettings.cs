@@ -1,7 +1,6 @@
-﻿namespace SimplePDF.NET.Internals
+﻿namespace SimplePDF.NET.Internals;
+
+internal class PdfSettings
 {
-    internal class PdfSettings
-    {
-        internal int MaxLeafSize = 10;
-    }
+    internal int MaxLeafSize = 10;
 }

@@ -1,8 +1,7 @@
-﻿namespace SimplePDF.NET.Internals
+﻿namespace SimplePDF.NET.Internals;
+
+internal static class GlobalVariables
 {
-    internal static class GlobalVariables
-    {
-        internal static int ObjNumber { get; set; }
-    }
+    internal static int ObjNumber { get; set; }
 }
 

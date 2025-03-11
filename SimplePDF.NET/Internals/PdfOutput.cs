@@ -1,64 +1,63 @@
-﻿using SimplePDF.NET.Internals.FileStructure;
+﻿using SimplePDF.NET.Helpers;
+using SimplePDF.NET.Internals.FileStructure;
 using SimplePDF.NET.Internals.Objects;
-using SimplePDF.NET.Utilities;
 
-namespace SimplePDF.NET.Internals
+namespace SimplePDF.NET.Internals;
+
+internal class PdfOutput : IDisposable
 {
-    internal class PdfOutput : IDisposable
+    internal event EventHandler<long> OnObjectWritten = default!;
+
+    private long _position;
+    private long? _xrefPosition;
+
+    private readonly MemoryStream output = new();
+
+    internal byte[] GetBytes() => output.ToArray();
+
+    private void Write(byte[] bytes)
     {
-        internal event EventHandler<long> OnObjectWritten = default!;
+        output.Write(bytes);
+        _position += bytes.Length;
+    }
 
-        private long _position;
-        private long? _xrefPosition;
+    private void WriteString(string value)
+        => Write(ByteHelper.GetBytes(value));
 
-        private readonly MemoryStream output = new();
+    internal void WriteHeader(PdfFileHeader header)
+    {
+        var headerBytes = header.GetBytes();
+        output.Write(headerBytes);
+        _position += headerBytes.Length;
+    }
 
-        internal byte[] GetBytes() => output.ToArray();
+    internal void WriteBody(PdfFileBody body)
+    {
 
-        private void Write(byte[] bytes)
-        {
-            output.Write(bytes);
-            _position += bytes.Length;
-        }
+    }
 
-        private void WriteString(string value)
-            => Write(ByteHelper.GetBytes(value));
+    internal void WriteXrefTable(PdfFileXrefTable xref)
+    {
+        _xrefPosition = _position;
+        var xrefBytes = xref.GetBytes();
+        output.Write(xrefBytes);
+        _position += xrefBytes.Length;
+    }
 
-        internal void WriteHeader(PdfFileHeader header)
-        {
-            var headerBytes = header.GetBytes();
-            output.Write(headerBytes);
-            _position += headerBytes.Length;
-        }
+    internal void WriteTrailer(PdfFileTrailer trailer)
+    {
 
-        internal void WriteBody(PdfFileBody body)
-        {
+    }
 
-        }
+    private void WriteObject(PdfObject pdfObject)
+    {
+        //get bytes and write to stream
+        //emit ObjectWritten event to cross ref table with object byte offset position
+        OnObjectWritten?.Invoke(this, _position);
+    }
 
-        internal void WriteXrefTable(PdfFileXrefTable xref)
-        {
-            _xrefPosition = _position;
-            var xrefBytes = xref.GetBytes();
-            output.Write(xrefBytes);
-            _position += xrefBytes.Length;
-        }
-
-        internal void WriteTrailer(PdfFileTrailer trailer)
-        {
-
-        }
-
-        private void WriteObject(PdfObject pdfObject)
-        {
-            //get bytes and write to stream
-            //emit ObjectWritten event to cross ref table with object byte offset position
-            OnObjectWritten?.Invoke(this, _position);
-        }
-
-        public void Dispose()
-        {
-            output.Dispose();
-        }
+    public void Dispose()
+    {
+        output.Dispose();
     }
 }
