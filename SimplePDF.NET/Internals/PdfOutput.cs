@@ -1,4 +1,5 @@
 ﻿using SimplePDF.NET.Helpers;
+using SimplePDF.NET.Internals.DocumentStructure;
 using SimplePDF.NET.Internals.FileStructure;
 using SimplePDF.NET.Internals.Objects;
 
@@ -6,7 +7,7 @@ namespace SimplePDF.NET.Internals;
 
 internal class PdfOutput : IDisposable
 {
-    internal event EventHandler<long> OnObjectWritten = default!;
+    internal event EventHandler<(int objectNumber, long offset)> OnObjectWritten = default!;
 
     private long _position;
     private long? _xrefPosition;
@@ -24,16 +25,33 @@ internal class PdfOutput : IDisposable
     private void WriteString(string value)
         => Write(ByteHelper.GetBytes(value));
 
-    internal void WriteHeader(PdfFileHeader header)
+    internal void WriteHeader()
     {
+        PdfFileHeader header = new(true);
         var headerBytes = header.GetBytes();
         output.Write(headerBytes);
         _position += headerBytes.Length;
     }
 
-    internal void WriteBody(PdfFileBody body)
+    internal void WriteBody(PdfPages pages)
     {
+        var pagesBytes = pages.GetBytes();
+        output.Write(pagesBytes);
+        _position += pagesBytes.Length;
+        OnObjectWritten?.Invoke(this, (pages.ObjectNumber, _position));
 
+        foreach (IndirectObject<PdfObject> pageKid in pages.GetKids())
+        {
+            WriteObject(pageKid);
+        }
+    }
+
+    private void WriteObject(IndirectObject<PdfObject> pdfObject)
+    {
+        var pdfObjectBytes = pdfObject.GetBytes();
+        output.Write(pdfObjectBytes);
+        _position += pdfObjectBytes.Length;
+        OnObjectWritten?.Invoke(this, (pdfObject.ObjectNumber, _position));
     }
 
     internal void WriteXrefTable(PdfFileXrefTable xref)
@@ -47,13 +65,6 @@ internal class PdfOutput : IDisposable
     internal void WriteTrailer(PdfFileTrailer trailer)
     {
 
-    }
-
-    private void WriteObject(PdfObject pdfObject)
-    {
-        //get bytes and write to stream
-        //emit ObjectWritten event to cross ref table with object byte offset position
-        OnObjectWritten?.Invoke(this, _position);
     }
 
     public void Dispose()

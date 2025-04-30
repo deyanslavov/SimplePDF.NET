@@ -1,4 +1,5 @@
 ﻿using SimplePDF.NET.Helpers;
+using SimplePDF.NET.Internals.Tokens;
 
 namespace SimplePDF.NET.Internals.Objects;
 
@@ -9,22 +10,53 @@ namespace SimplePDF.NET.Internals.Objects;
 /// </summary>
 internal class IndirectObject<T> : PdfObject where T : PdfObject
 {
-    private readonly T _objectReference;
+    internal T Object { get; }
 
-    internal int ObjectNumber { get; private set; }
+    internal int ObjectNumber { get; }
 
-    internal int GenerationNumber { get; private set; }
-
-    internal long ByteOffsetPosition { get; private set; }
+    internal short GenerationNumber { get; }
 
     internal IndirectObject(T objRef)
     {
-        _objectReference = objRef;
+        Object = objRef;
+
+        ObjectNumber = ObjectNumberGenerator.New();
+        GenerationNumber = 0;
+    }
+
+    internal byte[] GetBytesIndirect()
+    {
+        return
+            [
+            ..ByteHelper.GetBytes(ObjectNumber.ToString()),
+            ..Whitespaces.SPACE,
+            ..ByteHelper.GetBytes(GenerationNumber.ToString()),
+            ..Whitespaces.SPACE,
+            ..ByteHelper.GetBytes(Constants.IndirectReferenceObjectKeyword),
+            ];
+        return
+            [
+            ..BitConverter.GetBytes(ObjectNumber),
+            ..Whitespaces.SPACE,
+            ..BitConverter.GetBytes(GenerationNumber),
+            ..Whitespaces.SPACE,
+            ..ByteHelper.GetBytes(Constants.IndirectReferenceObjectKeyword)
+            ];
+        return ByteHelper.GetBytes(ToString());
     }
 
     internal override byte[] GetBytes()
     {
-        return ByteHelper.GetBytes(ToString());
+        return
+            [
+            ..ByteHelper.GetBytes(ObjectNumber.ToString()),
+            ..Whitespaces.SPACE,
+            ..ByteHelper.GetBytes(GenerationNumber.ToString()),
+            ..Whitespaces.SPACE,
+            ..PdfWriter.OBJ,
+            ..Object.GetBytes(),
+            ..PdfWriter.ENDOBJ,
+            ];
     }
 
     public override string ToString()

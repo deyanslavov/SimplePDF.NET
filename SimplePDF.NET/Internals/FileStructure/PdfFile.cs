@@ -1,8 +1,11 @@
-﻿namespace SimplePDF.NET.Internals.FileStructure;
+﻿using SimplePDF.NET.Internals.DocumentStructure;
+
+namespace SimplePDF.NET.Internals.FileStructure;
 
 internal class PdfFile
 {
     private bool _hasBinaryData;
+    private readonly PdfCatalog _catalog;
     private readonly PdfFileHeader _header;
     private readonly PdfFileBody _body;
     private readonly PdfFileXrefTable _crossRefTable;
@@ -17,13 +20,22 @@ internal class PdfFile
         _trailer = trailer;
     }
 
+    internal PdfFile(PdfCatalog catalog)
+    {
+        _hasBinaryData = true;
+        _header = new PdfFileHeader(true);
+        _catalog = catalog;
+        _crossRefTable = new PdfFileXrefTable();
+        _trailer = new PdfFileTrailer();
+    }
+
     internal byte[] GetBytes()
     {
         using var output = new PdfOutput();
-        output.OnObjectWritten += (_, offset) => _crossRefTable.AddObjectRef(offset, 0, false);
+        output.OnObjectWritten += (_, data) => _crossRefTable.AddObjectRef(data.objectNumber, data.offset, 0, false);
 
-        output.WriteHeader(_header);
-        output.WriteBody(_body);
+        output.WriteHeader();
+        output.WriteBody(_catalog.PageTree.Root);
         output.WriteXrefTable(_crossRefTable);
         output.WriteTrailer(_trailer);
 

@@ -1,6 +1,4 @@
-﻿using SimplePDF.NET.Internals.Objects;
-
-namespace SimplePDF.NET.Internals.DocumentStructure;
+﻿namespace SimplePDF.NET.Internals.DocumentStructure;
 
 /// <summary>
 /// The pages in a PDF are accessed through the page tree, which defines the ordering of the pages. 
@@ -14,20 +12,23 @@ namespace SimplePDF.NET.Internals.DocumentStructure;
 /// </summary>
 internal class PdfPageTree
 {
+    private PdfPages _currentPagesNode;
     private readonly PdfPages _root;
-    private readonly IList<IndirectObject<PdfObject>> _pageRefs;
     private readonly IList<PdfPage> _pages;
-    private readonly IList<PdfPages> _parents;
     private readonly PdfSettings _settings;
+
+    internal PdfPages Root => _root;
 
     internal PdfPageTree()
     {
-        _pageRefs = new List<IndirectObject<PdfObject>>();
-        _pages = new List<PdfPage>();
-        _root = new PdfPages(null);
-        _parents = new List<PdfPages>();
-        _parents.Add(_root);
         _settings = new PdfSettings();
+
+        _pages = [];
+        _root = new PdfPages(null);
+
+        PdfPages firstPagesNode = new(_root);
+        _root.Add(firstPagesNode);
+        _currentPagesNode = firstPagesNode;
     }
 
     /// <summary>
@@ -35,52 +36,39 @@ internal class PdfPageTree
     /// </summary>
     /// <param name="pageNumber"></param>
     /// <returns></returns>
-    internal PdfPage? GetPage(int pageNumber)
+    internal PdfPage GetPage(int pageNumber)
     {
-        //validate page number
         if (!_pages.Any())
         {
             throw new ArgumentException($"Page list is empty.");
         }
-        if (pageNumber <= 0 || pageNumber - 1 > _pages.Count)
+
+        if (pageNumber < 1)
         {
-            throw new ArgumentException($"Page number (1-based) must be greater than or equal to 1 and less than or equal the total number of pages.");
+            throw new ArgumentException($"Page number (1-based) must be greater than or equal to 1.");
         }
 
-        var pageIndex = pageNumber - 1;
-        return _pages.ElementAtOrDefault(pageIndex);
+        if (pageNumber > _pages.Count)
+        {
+            throw new ArgumentException($"Page number is invalid.");
+        }
+
+        return _pages[pageNumber - 1];
     }
 
     internal void AddPage(PdfPage page)
     {
-        PdfPages pdfPages;
-        //TODO: revise at later point regarding page tree structure
-        //if (_root != null)
-        //{
-        //    // in this case we save tree structure
-        //    if (_pageRefs.Count == 0)
-        //    {
-        //        pdfPages = _root;
-        //    }
-        //    else
-        //    {
-        //        //LoadPage(pageRefs.Count - 1);
-        //        pdfPages = _parents[_parents.Count - 1];
-        //    }
-        //}
-        //else
-        //{
-        pdfPages = _parents[_parents.Count - 1];
-        if (pdfPages.GetChildrenCount() % _settings.MaxLeafSize == 0 && _pages.Count > 0)
+        bool maxLeafSizeReached = _currentPagesNode.GetChildrenCount() == _settings.MaxLeafSize;
+        if (maxLeafSizeReached)
         {
-            pdfPages = new PdfPages(null);//TODO: check null?
-            _parents.Add(pdfPages);
+            PdfPages newPagesNode = new(_root);
+            _root.Add(newPagesNode);
+            _currentPagesNode = newPagesNode;
         }
-        //}
 
         page.PageNumber = _pages.Count + 1;
-        pdfPages.AddPage(page);
-        //_pageRefs.Add(page.GetUnderlyingPdfObject().AsIndirectReference());
+        page.AssignParent(_currentPagesNode);
+        _currentPagesNode.Add(page);
         _pages.Add(page);
     }
 }

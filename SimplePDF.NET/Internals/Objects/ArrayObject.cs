@@ -1,4 +1,7 @@
-﻿namespace SimplePDF.NET.Internals.Objects;
+﻿using SimplePDF.NET.Helpers;
+using System.Collections;
+
+namespace SimplePDF.NET.Internals.Objects;
 
 /// <summary>
 /// An array object is a heterogeneous collection of other objects enclosed in square brackets ([ and ]) and separated by white space. 
@@ -7,11 +10,11 @@
 /// <para>There is no limit to the number of elements in a PDF array. However, if you find an alternative to a large array 
 /// (such as the page tree for a single Kids array), it is always better to avoid them for performance reasons.</para>
 /// </summary>
-internal class ArrayObject : PdfObject
+internal class ArrayObject : PdfObject, IEnumerable<PdfObject>
 {
     private readonly IList<PdfObject> _objects;
 
-    internal long Length => _objects.Count;
+    internal int Length => _objects.Count;
 
     public ArrayObject()
     {
@@ -20,13 +23,27 @@ internal class ArrayObject : PdfObject
 
     internal void Add(PdfObject pdfObject) => _objects.Add(pdfObject);
 
+    internal PdfObject Get(int index) => _objects[index];
+
     internal override byte[] GetBytes()
     {
-        throw new NotImplementedException();
+        return ByteHelper.GetBytes(ToString());
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return $"{Constants.ArrayObjectPrefix}" +
+            string.Join(" ", _objects.Select(x => x.ToString())) +
+            $"{Constants.ArrayObjectPostfix}";
+    }
+
+    public IEnumerator<PdfObject> GetEnumerator()
+    {
+        return _objects.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return _objects.GetEnumerator();
     }
 }

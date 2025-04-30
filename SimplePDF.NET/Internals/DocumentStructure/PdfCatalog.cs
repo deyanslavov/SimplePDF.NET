@@ -1,4 +1,8 @@
-﻿namespace SimplePDF.NET.Internals.DocumentStructure;
+﻿using SimplePDF.NET.Helpers;
+using SimplePDF.NET.Internals.Objects;
+using SimplePDF.NET.Internals.Tokens;
+
+namespace SimplePDF.NET.Internals.DocumentStructure;
 
 /// <summary>
 /// A PDF document is a collection of objects, starting with the Root object. The reason that it is called the root is that 
@@ -10,7 +14,30 @@
 /// <item>Pages, whose value is an indirect reference to the page tree.</item>
 /// </list></para>
 /// </summary>
-internal class PdfCatalog
+internal class PdfCatalog : IndirectObject<DictionaryObject>
 {
-    private readonly PdfPageTree _pageTree;
+    //TODO: Metadata, AcroForm, ViewerPreferences and other properties to be added..
+
+    internal PdfPageTree PageTree { get; }
+
+    internal PdfCatalog() : base(new DictionaryObject())
+    {
+        PageTree = new PdfPageTree();
+
+        Object.Add(NameObject.Type, new NameObject("Catalog")); 
+    }
+
+
+    internal override byte[] GetBytes()
+    {
+        return
+            [
+            ..ByteHelper.GetBytes(ObjectNumber.ToString()),
+            ..Whitespaces.SPACE,
+            ..ByteHelper.GetBytes(GenerationNumber.ToString()),
+            ..PdfWriter.OBJ,
+            ..Object.GetBytes(),
+            ..PdfWriter.ENDOBJ,
+            ];
+    }
 }

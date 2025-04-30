@@ -1,40 +1,66 @@
-﻿using SimplePDF.NET.Internals.Objects;
+﻿using SimplePDF.NET.Helpers;
+using SimplePDF.NET.Internals.Objects;
+using SimplePDF.NET.Internals.Tokens;
 
 namespace SimplePDF.NET.Internals.DocumentStructure;
 
-internal class PdfPages : PdfWrapper<DictionaryObject>
+internal class PdfPages : IndirectObject<DictionaryObject>
 {
-    private int _kidsCount = 0;
     private readonly ArrayObject _kids;
     private readonly PdfPages? _parent;
 
-    public PdfPages(PdfPages? parent) :base(new DictionaryObject())
+    //TODO: field for total kids count when using tree structure
+
+    public PdfPages(PdfPages? parent) : base(new DictionaryObject())
     {
         _parent = parent;
-        _kids = new ArrayObject();
+        _kids = [];
 
-        GetUnderlyingPdfObject().Add(NameObject.Type, NameObject.Pages);
-        GetUnderlyingPdfObject().Add(NameObject.Kids, _kids);//kids
-        GetUnderlyingPdfObject().Add(NameObject.Count, new NumericObject(_kids.Length));
+        Object.Add(NameObject.Type, NameObject.Pages);
 
-        if(_parent is not null)
+        if (_parent is not null)
         {
-            GetUnderlyingPdfObject().Add(NameObject.Parent, _parent.GetUnderlyingPdfObject());
+            Object.Add(NameObject.Parent, _parent);
         }
     }
 
-    internal int GetChildrenCount() => _kidsCount;
+    internal ArrayObject GetKids() => _kids;
 
-    internal void AddPage(PdfPage page)
+    internal int GetChildrenCount() => _kids.Length;
+
+    internal IndirectObject<DictionaryObject> AsIndirect() => this;
+
+    internal void Add(PdfObject obj)
     {
-        _kids.Add(page.GetUnderlyingPdfObject());
-        page.AssignParent(this);
-        IncrementChildrenCount();
+        _kids.Add(obj);
     }
 
-    internal void IncrementChildrenCount()
+    internal override byte[] GetBytes()
     {
-        _kidsCount++;
-        _parent?.IncrementChildrenCount();
+        Object.Add(NameObject.Kids, _kids);
+        Object.Add(NameObject.Count, new NumericObject(_kids.Length));
+
+        return
+            [
+            ..ByteHelper.GetBytes(ObjectNumber.ToString()),
+            ..Whitespaces.SPACE,
+            ..ByteHelper.GetBytes(GenerationNumber.ToString()),
+            ..PdfWriter.OBJ,
+            ..Object.GetBytes(),
+            ..PdfWriter.ENDOBJ,
+            ..GetKidsBytes(),
+            ];
+    }
+
+    private byte[] GetKidsBytes()
+    {
+        var memoryStream = new MemoryStream();
+
+        foreach (var kid in _kids)
+        {
+            memoryStream.Write(kid.GetBytes());
+        }
+
+        return memoryStream.ToArray();
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SimplePDF.NET.Internals.Objects;
+﻿using SimplePDF.NET.Helpers;
+
+namespace SimplePDF.NET.Internals.Objects;
 
 /// <summary>
 /// As it serves as the basis for almost every higher-level object, the most common object in PDF is the dictionary object. 
@@ -29,14 +31,14 @@ internal class DictionaryObject : PdfObject
 
     internal override byte[] GetBytes()
     {
-        throw new NotImplementedException();
+        return ByteHelper.GetBytes(ToString());
     }
 
     public override string ToString()
     {
         return
-            $"{Constants.DictionaryObjectPrefix}" +
+            $"{Constants.DictionaryObjectPrefix}{Environment.NewLine}" +
             string.Join(Environment.NewLine, _map.Select(x => $"{x.Key} {x.Value}")) +
-            $"{Constants.DictionaryObjectPostfix}";
+            $"{Environment.NewLine}{Constants.DictionaryObjectPostfix}";
     }
 }

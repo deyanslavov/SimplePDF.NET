@@ -16,9 +16,9 @@ internal class PdfFileXrefTable
 {
     private IList<CrossReference> _entries = new List<CrossReference>();
 
-    internal void AddObjectRef(long offset, int generationNumber, bool isFree)
+    internal void AddObjectRef(int objectNumber, long offset, int generationNumber, bool isFree)
     {
-        _entries.Add(new CrossReference(offset, generationNumber, isFree));
+        _entries.Add(new CrossReference(objectNumber, offset, generationNumber, isFree));
     }
 
     internal byte[] GetBytes()
@@ -32,7 +32,7 @@ internal class PdfFileXrefTable
         //0000000000 65535 f
         stringBuilder.Append(defaultXrefEntry);
 
-        foreach (var entry in _entries)
+        foreach (var entry in _entries.OrderBy(entry => entry.ObjectNumber))
         {
             //append each entry in format 'nnnnnnnnnn ggggg n eol'
             stringBuilder.Append(entry.ToString());
@@ -55,12 +55,15 @@ internal class PdfFileXrefTable
     /// </summary>
     private class CrossReference
     {
-        public CrossReference(long byteOffset, int generationNumber, bool isFree)
+        public CrossReference(int objectNumber, long byteOffset, int generationNumber, bool isFree)
         {
+            ObjectNumber = objectNumber;
             ByteOffset = byteOffset;
             GenerationNumber = generationNumber;
             IsFree = isFree;
         }
+
+        public int ObjectNumber { get; }
 
         public long ByteOffset { get; }
 

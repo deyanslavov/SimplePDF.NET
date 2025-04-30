@@ -10,5 +10,7 @@ internal class Constants
     internal const string HexStringObjectPostfix = ">";
     internal const string DictionaryObjectPrefix = "<<";
     internal const string DictionaryObjectPostfix = ">>";
+    internal const string ArrayObjectPrefix = "[";
+    internal const string ArrayObjectPostfix = "]";
 }
 
